@@ -38,7 +38,7 @@ echo "Anbefalet cost beregnet: " . $cost . "\n"
     <?php
 	// Definer variabler med tom værdi til echo i formular
 	$bruger_navn = '';
-	$bruger_email = '';
+	$bruger_email =  '';
 	
 	// Hvis vi har sendt formular, køres følgende kodeblok
 	if ( isset($_POST['opret_bruger']) )

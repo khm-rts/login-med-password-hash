@@ -34,7 +34,7 @@ if ( !isset($_SESSION['bruger_id']) )
 	$result		= $mysqli->query($query);
 
 	// Tjek om ovenstående forespørgsel fejlede (hvis $result returnede false)
-	if ($result == false)
+	if (!$result)
 	{
 		// Udskriv fejlbesked fra databasen, samt forespørgslen for at se evt. fejl heri
 		die ( $mysqli->error . '<pre>Query: ' . $query . '</pre>');

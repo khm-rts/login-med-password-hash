@@ -19,7 +19,7 @@ ob_start()
 	if ( isset($_SESSION['bruger_id']) )
 	{
 		?>
-    	<p>Du er logget ind som: <strong><?php echo $_SESSION['bruger_navn']; ?></strong></p>
+    	<p>Du er logget ind som: <strong><?php echo $_SESSION['bruger_navn'] ?></strong></p>
         <a href="login.php?logud">Log ud</a>
         <?php
 		// Hvis logud er sat i vores query string (adresselinjen)
@@ -34,6 +34,7 @@ ob_start()
 
 			// Opdater siden
 			header('Location: login.php');
+			// Sikrer at der ikke udføres mere kode i filen
 			exit;
 		}			
 	}
@@ -58,7 +59,7 @@ ob_start()
         </form>
         
         <?php
-        // Tjek om formular er kørt
+		// Hvis vi har sendt formular, køres følgende kodeblok
         if ( isset($_POST['login']) )
         {
             // Tjek begge felter er udfyldt. HTML5-validering er ikke sikker, men er til stede for brugervenligheden skyld
@@ -78,9 +79,6 @@ ob_start()
 					WHERE 
 						bruger_email = '$bruger_email'";
 
-				// Udskriv ovenstående forespørgsel til testvisning. Udkommenteres i færdigt login.
-				echo '<p>' . $query . '</p>';
-
 				// Send forespørgslen til databasen
 				$result	= $mysqli->query($query);
 
@@ -98,7 +96,7 @@ ob_start()
 					$row = $result->fetch_object();
 
 					// Brug den indbyggede funktion password_verify() (fra PHP v.5.5), til at tjekke om den indtastede adgangskode, matcher den hashede fra databasen. Er det tilfældet logges ind, ved at gemme brugerens id og navn i session
-					if ( password_verify($bruger_adgangskode, $row->bruger_hashed_adgangskode) === true )
+					if ( password_verify($bruger_adgangskode, $row->bruger_hashed_adgangskode) )
 					{
 						// Da der sker ændringer i session, genereres et nyt id
 						session_regenerate_id();
@@ -110,6 +108,7 @@ ob_start()
 
 						// Opdatér siden
 						header('Location: login.php');
+						// Sikrer at der ikke udføres mere kode i filen
 						exit;
 					}
 					// Hvis det indtastede ikke matchede vores hashed adgangskode fra dabasen, vises denne fejlbesked. Besked i parantes skal kun vises for at kunne fejlsøge - man vil aldrig oplyse evt. hackere at det lykkedes at finde en e-mail og det kun er koden der er forkert.
